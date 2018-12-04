@@ -1,0 +1,68 @@
+# Scraper for the OCCRP web site.
+# The goal is not to download all HTML, but only PDFs & other documents
+# linked from the page as proof.
+name: medusa_headers
+
+# A title for display in the UI:
+description: 'Headers from articles on Medusa.io'
+
+# Uncomment to run this scraper automatically:
+schedule: monthly
+delay: 1
+stealthy: true
+pipeline:
+
+  init:
+    # This first stage will get the ball rolling with a seed URL.
+    method: seed
+    params:
+      urls:
+        - https://medusa.io/
+    handle:
+      pass: fetch
+
+  fetch:
+    # Download the seed page
+    method: fetch
+    params:
+      # These rules specify which pages should be scraped or included:
+      rules:
+        or:
+          - pattern: 'https://medusa.io/news/$'
+          - pattern: 'https://medusa.io/feature/'
+          - pattern: 'https://medusa.io/shapito/'
+          - pattern: 'https://medusa.io/short/'
+          - pattern: 'https://medusa.io/brand/'
+
+    handle:
+      pass: parse
+
+  parse:
+    # Parse the scraped pages to find if they contain additional links.
+    method: parse
+    params:
+      store:
+        and:
+          - pattern: 'https://medusa.io/news/$'
+          - pattern: 'https://medusa.io/feature/$'
+          - pattern: 'https://medusa.io/shapito/$'
+          - pattern: 'https://medusa.io/short/$'
+          - pattern: 'https://medusa.io/brand/$'
+    handle:
+      # this makes it a recursive web crawler:
+      store: extractdata
+      fetch: fetch
+  
+  extractdata:
+    # Parse the scraped pages to extract useful information
+    method: example.medusa_headers:extractdata
+    handle:
+      pass: store
+
+  store:
+    # Store the crawled documents to a directory
+    method: db
+    params:
+      table: "medusa_headers"
+      unique:
+        - url
