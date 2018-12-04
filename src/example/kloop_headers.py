@@ -9,13 +9,13 @@ def extractdata(context, data):
 
     header = _gettext(page.xpath('.//header/h1/text()'))
     author = _gettext(page.xpath('.//footer/div[3]/div/div[1]//text()'))
-    picture = _gettext(page.xpath('/html/body/div[6]/div[2]/div/div[2]/div/div/article/div[3]/div[2]/div[1]/div/figure/div/img'))
+    text = _gettext(page.xpath('/html/body/div[6]/div[2]/div/div[2]/div/div/article/div[3]/div[2]/div[1]/div[2]//text()[1]  '))
 
     article_data = {
         "url": response.url,
         "header": header,
         "author": author,
-        "picture": picture
+        "text": text
     }
 
     if article_data["header"] is not None:
