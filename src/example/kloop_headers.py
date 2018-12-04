@@ -8,12 +8,12 @@ def extractdata(context, data):
     # Parse the rest of the page to extract structured data.
 
     header = _gettext(page.xpath('.//header/h1/text()'))
-    text = _gettext(page.xpath('.//article'))
+    author = _gettext(page.xpath('.//footer/div[3]/div/div[1]'))
 
     article_data = {
         "url": response.url,
         "header": header,
-        "text": text
+        "author": author
     }
 
     if article_data["header"] is not None:
