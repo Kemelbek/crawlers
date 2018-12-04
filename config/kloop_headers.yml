@@ -1,0 +1,60 @@
+# Scraper for the OCCRP web site.
+# The goal is not to download all HTML, but only PDFs & other documents
+# linked from the page as proof.
+name: kg_kloop_headers
+
+# A title for display in the UI:
+description: 'Headers from articles on Kloop.kg'
+
+# Uncomment to run this scraper automatically:
+schedule: monthly
+delay: 1
+stealthy: true
+pipeline:
+
+  init:
+    # This first stage will get the ball rolling with a seed URL.
+    method: seed
+    params:
+      urls:
+        - https://kloop.kg/page/2/
+    handle:
+      pass: fetch
+
+  fetch:
+    # Download the seed page
+    method: fetch
+    params:
+      # These rules specify which pages should be scraped or included:
+      rules:
+        or:
+          - pattern: 'https://kloop.kg/blog/'
+          - pattern: 'https://kloop.kg/page/2/$'
+    handle:
+      pass: parse
+
+  parse:
+    # Parse the scraped pages to find if they contain additional links.
+    method: parse
+    params:
+      store:
+        and:
+          - pattern: 'https://kloop.kg/blog/'
+    handle:
+      # this makes it a recursive web crawler:
+      store: extractdata
+      fetch: fetch
+  
+  extractdata:
+    # Parse the scraped pages to extract useful information
+    method: example.kloop_headers:extractdata
+    handle:
+      pass: store
+
+  store:
+    # Store the crawled documents to a directory
+    method: db
+    params:
+      table: "kg_kloop_headers"
+      unique:
+        - url
