@@ -1,10 +1,10 @@
 # Scraper for the OCCRP web site.
 # The goal is not to download all HTML, but only PDFs & other documents
 # linked from the page as proof.
-name: medusa_headers
+name: meduza_headers
 
 # A title for display in the UI:
-description: 'Headers from articles on Medusa.io'
+description: 'Headers from articles on meduza.io'
 
 # Uncomment to run this scraper automatically:
 schedule: monthly
@@ -17,7 +17,7 @@ pipeline:
     method: seed
     params:
       urls:
-        - https://medusa.io/
+        - https://meduza.io/
     handle:
       pass: fetch
 
@@ -28,11 +28,11 @@ pipeline:
       # These rules specify which pages should be scraped or included:
       rules:
         or:
-          - pattern: 'https://medusa.io/news/$'
-          - pattern: 'https://medusa.io/feature/'
-          - pattern: 'https://medusa.io/shapito/'
-          - pattern: 'https://medusa.io/short/'
-          - pattern: 'https://medusa.io/brand/'
+          - pattern: 'https://meduza.io/news/$'
+          - pattern: 'https://meduza.io/feature/'
+          - pattern: 'https://meduza.io/shapito/'
+          - pattern: 'https://meduza.io/short/'
+          - pattern: 'https://meduza.io/brand/'
 
     handle:
       pass: parse
@@ -43,11 +43,11 @@ pipeline:
     params:
       store:
         and:
-          - pattern: 'https://medusa.io/news/$'
-          - pattern: 'https://medusa.io/feature/$'
-          - pattern: 'https://medusa.io/shapito/$'
-          - pattern: 'https://medusa.io/short/$'
-          - pattern: 'https://medusa.io/brand/$'
+          - pattern: 'https://meduza.io/news/$'
+          - pattern: 'https://meduza.io/feature/$'
+          - pattern: 'https://meduza.io/shapito/$'
+          - pattern: 'https://meduza.io/short/$'
+          - pattern: 'https://meduza.io/brand/$'
     handle:
       # this makes it a recursive web crawler:
       store: extractdata
@@ -55,7 +55,7 @@ pipeline:
   
   extractdata:
     # Parse the scraped pages to extract useful information
-    method: example.medusa_headers:extractdata
+    method: example.meduza_headers:extractdata
     handle:
       pass: store
 
@@ -63,6 +63,6 @@ pipeline:
     # Store the crawled documents to a directory
     method: db
     params:
-      table: "medusa_headers"
+      table: "meduza_headers"
       unique:
         - url
