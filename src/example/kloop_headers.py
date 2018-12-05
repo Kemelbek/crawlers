@@ -17,7 +17,7 @@ def extractdata(context, data):
         "header": header,
         "author": author,
         "picture": picture,
-         "text" = text
+        "text" : text
     }
 
     if article_data["header"] is not None:
