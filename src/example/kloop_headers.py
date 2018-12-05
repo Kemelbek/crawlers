@@ -10,7 +10,7 @@ def extractdata(context, data):
     header = _gettext(page.xpath('.//header/h1/text()'))
     author = _gettext(page.xpath('.//footer/div[3]/div/div[1]//text()'))
     picture = _gettext(page.xpath('.//div[contains(@class, "post-content")]//img[contains(@src, "wp-content/uploads")]/@src'))
-    text = _gettext(page.xpath('.//div[@class="td-post-content"]'))
+    text = _gettext(page.xpath('.//div[@class="td-post-content"]/text()'))
 
     article_data = {
         "url": response.url,
