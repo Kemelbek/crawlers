@@ -9,16 +9,16 @@ def extractdata(context, data):
 
     header = _gettext(page.xpath('.//header/h1/text()'))
     author = _gettext(page.xpath('.//footer/div[3]/div/div[1]//text()'))
-    text = _gettext(page.xpath('.//article/div[3]/div[2]//text()[1]'))
+    picture = _gettext(page.xpath('//div[contains(@class, 'post-content')]//img[contains(@src, 'wp-content/uploads')]/@src'))
 
     article_data = {
         "url": response.url,
         "header": header,
         "author": author,
-        "text": text
+        "picture": picture
     }
 
-    if article_data["text"] is not None:
+    if article_data["header"] is not None:
         # If 'rule' is not set, it defaults to 'pass', which triggers the
         # final 'store' stage.
         context.emit(data=article_data)
