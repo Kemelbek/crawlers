@@ -10,12 +10,14 @@ def extractdata(context, data):
     header = _gettext(page.xpath('.//header/h1/text()'))
     author = _gettext(page.xpath('.//footer/div[3]/div/div[1]//text()'))
     picture = _gettext(page.xpath('.//div[contains(@class, "post-content")]//img[contains(@src, "wp-content/uploads")]/@src'))
+    text = _gettext(page.xpath('.//div[@class="td-post-content"]'))
 
     article_data = {
         "url": response.url,
         "header": header,
         "author": author,
-        "picture": picture
+        "picture": picture,
+         "text" = text
     }
 
     if article_data["header"] is not None:
